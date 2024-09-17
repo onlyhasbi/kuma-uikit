@@ -9,19 +9,31 @@ type ChildrenProps = {
 
 type Sidebar = {
   isCollapsible?: boolean;
+  defaultCollapsibleWidth?: number;
 } & React.PropsWithChildren &
   VStackProps;
 
-function Sidebar({ children, isCollapsible = false, ...props }: Sidebar) {
+function Sidebar({
+  children,
+  isCollapsible = false,
+  w = 400,
+  defaultCollapsibleWidth = 100,
+  ...props
+}: Sidebar) {
   const [collapsible, toggle] = useReducer((c) => !c, false);
+  const width = !isCollapsible
+    ? defaultCollapsibleWidth
+    : collapsible
+    ? w
+    : defaultCollapsibleWidth;
 
   return (
     <VStack
       minH={"100vh"}
-      maxW={!isCollapsible ? 225 : collapsible ? 65 : props.maxW ?? 225}
+      w={width}
       position={"relative"}
       color={"white"}
-      transition="max-width 0.3s cubic-bezier(0.65, 0, 0.35, 1)"
+      transition="width 0.3s cubic-bezier(0.65, 0, 0.35, 1)"
       {...props}
     >
       <CollapsibleButton
@@ -48,6 +60,7 @@ Sidebar.Title = ({ children, collapsible, ...props }: ChildrenProps) => {
       {...props}
     >
       <Box
+        py={collapsible ? 0 : 15}
         transform={collapsible ? "scale(.7)" : "scale(1)"}
         transition="transform 0.3s cubic-bezier(0.65, 0, 0.35, 1)"
       >
