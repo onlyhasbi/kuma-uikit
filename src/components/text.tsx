@@ -1,20 +1,6 @@
-import {
-  HStack,
-  HStackProps,
-  Text as KumaText,
-  TextProps,
-} from "@kuma-ui/core";
+import { HStack, Text as KumaText } from "@kuma-ui/core";
 import Icon from "./icon";
-import { IconElement } from "./types";
-
-export type Icon = {
-  iconPosition?: "left" | "right";
-} & IconElement;
-
-type Props = {
-  container?: Omit<HStackProps, "flexDirection">;
-} & Icon &
-  TextProps;
+import { TextProps } from "./types";
 
 function Text({
   children,
@@ -22,8 +8,11 @@ function Text({
   iconPosition = "left",
   container,
   ...props
-}: Props) {
+}: TextProps) {
   const isLeft = iconPosition === "left";
+
+  if (!children) return null;
+
   return (
     <HStack
       gap={container?.gap || 7}
@@ -36,6 +25,7 @@ function Text({
           whiteSpace={"nowrap"}
           overflow={"hidden"}
           textOverflow={"ellipsis"}
+          title={typeof children == "string" ? children : undefined}
           {...props}
         >
           {children}

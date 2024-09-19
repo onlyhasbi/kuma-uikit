@@ -1,38 +1,30 @@
 import { HStack, VStack } from "@kuma-ui/core";
-import React, { useState } from "react";
-import Text, { Icon } from "./text";
+import { useState } from "react";
+import { AccordionProps } from "./types";
 
-type Props = {
-  title?: React.ReactNode;
-  isCollapsible?: boolean;
-  items?: Array<React.ReactNode>;
-} & Icon;
+function Accordion({ title, items, isCollapsible }: AccordionProps) {
+  const [toggle, setCollapsible] = useState(!isCollapsible || false);
 
-function Accordion({ icon, iconPosition, title, items, isCollapsible }: Props) {
-  const [toggle, setCollapsible] = useState(false);
+  const renderToggle = isCollapsible && (
+    <button onClick={() => setCollapsible(!toggle)}>
+      {toggle ? "-" : "+"}
+    </button>
+  );
 
   return (
     <VStack>
-      <HStack justify={"space-between"} position={"relative"}>
-        {title && (
-          <Text
-            icon={icon}
-            iconPosition={iconPosition}
-          >
-            {title}
-          </Text>
-        )}
-        {isCollapsible && (
-          <button onClick={() => setCollapsible(!toggle)}>
-            {toggle ? "-" : "+"}
-          </button>
-        )}
+      <HStack
+        justify={isCollapsible ? "space-between" : "center"}
+        position={"relative"}
+      >
+        {title}
+        {renderToggle}
       </HStack>
       {isCollapsible &&
         toggle &&
         items &&
         items?.length > 0 &&
-        items?.map((item) => <>{item}</>)}
+        items?.map((item) => item)}
     </VStack>
   );
 }

@@ -1,10 +1,13 @@
-import { Flex, VStack } from "@kuma-ui/core";
-import { Aperture, LibraryBig } from "lucide-react";
+import { Flex, HStack, VStack } from "@kuma-ui/core";
+import { Aperture, File, LibraryBig } from "lucide-react";
 import Accordion from "./components/accordion";
 import Text from "./components/text";
+import { useSidebar } from "./hooks/useSidebar";
 import { Sidebar } from "./layouts";
 
 function App() {
+  const { iconToggle } = useSidebar();
+
   return (
     <Flex>
       <Sidebar w={225} isCollapsible>
@@ -17,7 +20,22 @@ function App() {
         <Sidebar.Content bg={"blue"} p={15}>
           {(collapsible) => (
             <Accordion
-              title="Test collapsible"
+              key={+new Date()}
+              title={
+                <HStack
+                  as="button"
+                  gap={3}
+                  onClick={iconToggle}
+                  border={"none"}
+                  bg={"transparent"}
+                  cursor={"pointer"}
+                  alignItems={"center"}
+                >
+                  <File color="white" />
+                  {collapsible && <Text color={"white"}>File</Text>}
+                </HStack>
+              }
+              container={{ bg: "black" }}
               items={["test"]}
               isCollapsible={collapsible}
             />

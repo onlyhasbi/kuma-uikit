@@ -1,11 +1,8 @@
-import { Box, BoxProps, Flex, VStack, VStackProps } from "@kuma-ui/core";
+import { Box, Flex, VStack, VStackProps } from "@kuma-ui/core";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
-import React, { useReducer } from "react";
-
-type ChildrenProps = {
-  collapsible?: boolean;
-  children: React.ReactNode | ((collapsible: boolean) => React.ReactNode);
-} & Omit<BoxProps, "children">;
+import React from "react";
+import { useSidebar } from "../hooks/useSidebar";
+import { ChildrenProps } from "./types";
 
 type Sidebar = {
   isCollapsible?: boolean;
@@ -20,7 +17,7 @@ function Sidebar({
   defaultCollapsibleWidth = 100,
   ...props
 }: Sidebar) {
-  const [collapsible, toggle] = useReducer((c) => !c, false);
+  const { collapsible, toggle } = useSidebar();
   const width = !isCollapsible
     ? defaultCollapsibleWidth
     : collapsible
@@ -52,7 +49,11 @@ function Sidebar({
   );
 }
 
-Sidebar.Title = ({ children, collapsible, ...props }: ChildrenProps) => {
+Sidebar.Title = ({
+  children,
+  collapsible,
+  ...props
+}: Partial<ChildrenProps>) => {
   return (
     <Box
       flexBasis={"auto"}
@@ -72,12 +73,14 @@ Sidebar.Title = ({ children, collapsible, ...props }: ChildrenProps) => {
 
 Sidebar.Content = ({
   children,
-  collapsible = false,
+  collapsible,
   ...props
-}: ChildrenProps) => {
+}: Partial<ChildrenProps>) => {
   return (
     <Box flexGrow={1} flexShrink={1} flexBasis={"auto"} {...props}>
-      {typeof children == "function" ? children(collapsible) : children}
+      {typeof children == "function"
+        ? children(Boolean(collapsible))
+        : children}
     </Box>
   );
 };
@@ -86,7 +89,7 @@ Sidebar.Footer = ({
   children,
   collapsible = false,
   ...props
-}: ChildrenProps) => {
+}: Partial<ChildrenProps>) => {
   return (
     <Box {...props}>
       {typeof children === "function" ? children(collapsible) : children}
@@ -120,7 +123,7 @@ const CollapsibleButton = ({
       borderRadius={100}
       cursor={"pointer"}
     >
-      {value ? <ChevronsRight size={17} /> : <ChevronsLeft size={17} />}
+      {value ? <ChevronsLeft size={17} /> : <ChevronsRight size={17} />}
     </Flex>
   ) : null;
 
