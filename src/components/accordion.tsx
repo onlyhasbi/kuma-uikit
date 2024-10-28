@@ -1,5 +1,6 @@
-import { HStack, VStack } from "@kuma-ui/core";
+import { cx } from "@linaria/core";
 import { useState } from "react";
+import { flex, justify, vStack } from "../styles";
 import { AccordionProps } from "./types";
 
 function Accordion({ title, items, isCollapsible }: AccordionProps) {
@@ -12,20 +13,25 @@ function Accordion({ title, items, isCollapsible }: AccordionProps) {
   );
 
   return (
-    <VStack>
-      <HStack
-        justify={isCollapsible ? "space-between" : "center"}
-        position={"relative"}
+    <div
+      className={cx(
+        vStack,
+        justify(isCollapsible ? "space-between" : "center")
+      )}
+    >
+      <div
+        className={cx(flex)}
+        // position={"relative"}
       >
         {title}
         {renderToggle}
-      </HStack>
+      </div>
       {isCollapsible &&
         toggle &&
         items &&
         items?.length > 0 &&
         items?.map((item) => item)}
-    </VStack>
+    </div>
   );
 }
 

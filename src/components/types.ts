@@ -1,24 +1,27 @@
-import { HStackProps, TextProps as TextPropsKuma } from "@kuma-ui/core";
+import { ClassName } from "@linaria/core/cx";
+import { PropsWithChildren } from "react";
 
 export type IconPosition = {
   iconPosition?: "left" | "right";
 };
 
-export type IconElement = {
-  icon?: JSX.Element;
-};
+export type IconElement = Partial<{
+  icon: JSX.Element;
+  color: string;
+  hover: string;
+}>;
 
 export type Icon = IconPosition & IconElement;
 
-export type ContainerStyle = {
-  container?: Omit<HStackProps, "flexDirection">;
-};
-
-export type TextProps = ContainerStyle & Icon & TextPropsKuma;
+export type TextProps = PropsWithChildren<
+  Icon & {
+    containerStyle: ClassName;
+    textStyle: ClassName;
+  }
+>;
 
 export type AccordionProps = {
   title?: React.ReactNode;
   isCollapsible?: boolean;
   items?: Array<React.ReactNode>;
-} & ContainerStyle &
-  Icon;
+} & Icon;

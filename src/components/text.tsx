@@ -1,37 +1,38 @@
-import { HStack, Text as KumaText } from "@kuma-ui/core";
+import { cx } from "@linaria/core";
 import Icon from "./icon";
 import { TextProps } from "./types";
+import { flex, flexDirection, gap, textEllipsis } from "../styles";
 
 function Text({
   children,
   icon,
   iconPosition = "left",
-  container,
-  ...props
+  containerStyle,
+  textStyle,
 }: TextProps) {
   const isLeft = iconPosition === "left";
 
   if (!children) return null;
 
   return (
-    <HStack
-      gap={container?.gap || 7}
-      flexDirection={isLeft ? undefined : "row-reverse"}
-      {...container}
+    <div
+      className={cx(
+        flex,
+        gap("7px"),
+        flexDirection(isLeft ? "row" : "row-reverse"),
+        containerStyle
+      )}
     >
       <Icon icon={icon} />
       {!children ? null : (
-        <KumaText
-          whiteSpace={"nowrap"}
-          overflow={"hidden"}
-          textOverflow={"ellipsis"}
+        <p
+          className={cx(textEllipsis, textStyle)}
           title={typeof children == "string" ? children : undefined}
-          {...props}
         >
           {children}
-        </KumaText>
+        </p>
       )}
-    </HStack>
+    </div>
   );
 }
 
